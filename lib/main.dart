@@ -3,13 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:work_manager_app/bloc/table_zoom_cubit.dart';
 import 'package:work_manager_app/common_utils.dart';
+import 'package:work_manager_app/feature/event/add_event_screen.dart';
 
 import 'bloc/current_timer_cubit.dart';
 import 'feature/day_row_widget.dart';
 import 'feature/main_drawer_widget.dart';
 import 'feature/table_date_event_widget.dart';
+import 'locator.dart';
 
 void main() {
+  setupLocator();
   runApp(MyApp());
 }
 
@@ -189,7 +192,9 @@ class _MyHomePageState extends State<MyHomePage> {
           elevation: 5.0,
           child: new Icon(Icons.add),
           backgroundColor: Colors.green,
-          onPressed: (){}
+          onPressed: (){
+            Navigator.of(context).push(MaterialPageRoute(builder: (context) => EventAddScreen()),);
+          }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
