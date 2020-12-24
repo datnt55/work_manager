@@ -1,5 +1,5 @@
 
-import 'package:work_manager_app/database/data_base_helper.dart';
+import 'package:work_manager_app/database/database_helper.dart';
 import 'package:work_manager_app/database/event.dart';
 
 import '../locator.dart';

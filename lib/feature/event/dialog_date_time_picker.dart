@@ -45,12 +45,12 @@ class DatePickerDialogState extends State<_DateTimePickerDialog>{
               children: [
                 CalendarDatePicker(
                   initialDate: DateTime.now(),
-                  firstDate: DateTime.now().subtract(Duration(days: 2)),
+                  firstDate: new DateTime(2000,01,01),
                   onDateChanged: (DateTime value) {
                     current = current.copyWith(day: value.day, month: value.month, year: value.year);
                     print(value);
                   },
-                  lastDate:  DateTime.now().add(Duration(days: 2)),
+                  lastDate: new DateTime(2100,01,01),
                 ),
                 Container(
                   height: 100,

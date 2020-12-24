@@ -6,6 +6,15 @@ extension DateOnlyCompare on DateTime {
   }
 }
 
+extension DateDifferentMidNight on DateTime {
+  Duration differenceMidNight(DateTime other) {
+    final midNightStart = new DateTime(this.year, this.month, this.day);
+    final midNightEnd = new DateTime(other.year, other.month, other.day);
+    return midNightStart.difference(midNightEnd);
+
+  }
+}
+
 extension MyDateUtils on DateTime {
   DateTime copyWith(
       {int year,

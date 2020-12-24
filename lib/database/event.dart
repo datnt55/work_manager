@@ -1,9 +1,14 @@
 import 'package:equatable/equatable.dart';
 
+// ignore: must_be_immutable
 class Event extends Equatable{
   String title;
   int fromDate;
   int endDate;
+  int color;
+
+
+  Event(this.title, this.fromDate, this.endDate, this.color);
 
   @override
   // TODO: implement props
@@ -11,14 +16,16 @@ class Event extends Equatable{
 
   Event.fromJson(Map<String, dynamic> json) {
     title = json['title'];
-    fromDate = json['fromDate'];
-    endDate = json['endDate'];
+    fromDate = json['start'];
+    endDate = json['end'];
+    color = json['color'];
   }
 
   Map<String, dynamic> toMap() {
     return Map<String, dynamic>()
       ..["title"] = title
-      ..["fromDate"] = fromDate
-      ..["endDate"] = endDate;
+      ..["start"] = fromDate
+      ..["end"] = endDate
+      ..["color"] = color;
   }
 }

@@ -6,7 +6,9 @@ import 'package:work_manager_app/common_utils.dart';
 import 'package:work_manager_app/feature/event/add_event_screen.dart';
 
 import 'bloc/current_timer_cubit.dart';
+import 'bloc/schedule/scheldule_bloc.dart';
 import 'feature/day_row_widget.dart';
+import 'feature/main/calendar_screen.dart';
 import 'feature/main_drawer_widget.dart';
 import 'feature/table_date_event_widget.dart';
 import 'locator.dart';
@@ -193,14 +195,22 @@ class _MyHomePageState extends State<MyHomePage> {
           child: new Icon(Icons.add),
           backgroundColor: Colors.green,
           onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (context) => EventAddScreen()),);
+            _navigateAddEvent(context);
           }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
 
     );
   }
+
+  _navigateAddEvent(BuildContext context) async {
+    final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EventAddScreen()));
+    if (result){
+      scheduleBloc.add(FetchSchedule());
+    }
+  }
 }
+ScheduleBloc scheduleBloc = ScheduleBloc();
 
 class TableViewWidget extends StatelessWidget {
   @override
@@ -226,7 +236,13 @@ class TableViewWidget extends StatelessWidget {
                   },
                   onInteractionEnd: (end){
                   },
-                  child: RowTableDateWidgetBloc()
+                  child: Stack(
+                    children: [
+                      CalendarScreen(),
+                      RowTableDateWidgetBloc(scheduleBloc),
+                      TodayLineWidget()
+                    ],
+                  )
               );
             });
       })

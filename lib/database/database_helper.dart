@@ -27,6 +27,7 @@ class DatabaseProvider{
             title TEXT,
             start INTEGER,
             end INTEGER,
+            color INTEGER,
             repeat INTEGER
         )""");
 
