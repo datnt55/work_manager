@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -7,10 +9,10 @@ import 'package:work_manager_app/feature/event/add_event_screen.dart';
 
 import 'bloc/current_timer_cubit.dart';
 import 'bloc/schedule/scheldule_bloc.dart';
-import 'feature/day_row_widget.dart';
+import 'feature/main/day_row_widget.dart';
 import 'feature/main/calendar_screen.dart';
-import 'feature/main_drawer_widget.dart';
-import 'feature/table_date_event_widget.dart';
+import 'feature/main/main_drawer_widget.dart';
+import 'feature/main/table_date_event_widget.dart';
 import 'locator.dart';
 
 void main() {
@@ -206,7 +208,10 @@ class _MyHomePageState extends State<MyHomePage> {
   _navigateAddEvent(BuildContext context) async {
     final result = await Navigator.push(context, MaterialPageRoute(builder: (context) => EventAddScreen()));
     if (result){
-      scheduleBloc.add(FetchSchedule());
+      new Timer(const Duration(milliseconds: 200), () {
+        scheduleBloc.add(FetchSchedule());
+      });
+
     }
   }
 }

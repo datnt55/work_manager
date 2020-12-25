@@ -9,3 +9,11 @@ class SaveSchedule extends BaseEvent{
 }
 
 class FetchSchedule extends BaseEvent{}
+
+@immutable
+class UpdateSchedule extends BaseEvent{
+  final Event event;
+
+  UpdateSchedule(this.event);
+
+}

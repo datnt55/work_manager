@@ -5,12 +5,13 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:work_manager_app/bloc/base/response_state.dart';
 import 'package:work_manager_app/bloc/base_bloc/base.dart';
 import 'package:work_manager_app/bloc/schedule/scheldule_bloc.dart';
-import 'event_color_dialog.dart';
-import 'file:///D:/Android/flutter/Example/WorkManager/work_manager/lib/feature/event/dialog_date_time_picker.dart';
 import 'package:work_manager_app/database/event.dart';
+
+import 'file:///D:/Android/flutter/Example/WorkManager/work_manager/lib/feature/event/dialog_date_time_picker.dart';
+
+import 'event_color_dialog.dart';
 
 class EventAddScreen extends StatelessWidget{
   @override
@@ -183,7 +184,7 @@ class EventFormState extends State<EventFormWidget>{
             );
           }else if (state is AddScheduleSuccessState){
             new Timer(const Duration(milliseconds: 10), () {
-              Navigator.pop(context);
+              Navigator.pop(context, true);
             });
           }
           return Container();

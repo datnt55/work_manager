@@ -21,7 +21,15 @@ class ScheduleBloc extends Bloc<BaseEvent, BaseState> {
 
   @override
   Stream<BaseState> mapEventToState(BaseEvent event,) async* {
-    if (event is SaveSchedule) {
+    if (event is UpdateSchedule) {
+      try {
+        yield (LoadingState());
+        final result = await repository.updateEvent(event.event);
+        yield (UpdateScheduleSuccessState());
+      } catch (e) {
+        yield (ErrorState(data: e.toString()));
+      }
+    }else if (event is SaveSchedule) {
       try {
         yield (LoadingState());
         final result = await repository.addFavorite(event.event);

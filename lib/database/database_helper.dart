@@ -44,9 +44,15 @@ class DatabaseProvider{
         conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
+  Future<int> updateEvent(Event event) async {
+    final db = await database;
+    return await db.update(TABLE_EVENT, event.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
+  }
+
   Future<List<Event>> getEvents() async {
     final db = await database;
-    List<Map<String, dynamic>> maps = await db.query(TABLE_EVENT);
+    List<Map<String, dynamic>> maps = await db.query(TABLE_EVENT, orderBy: "start");
     return maps.map((e) => Event.fromJson(e)).toList();
   }
 

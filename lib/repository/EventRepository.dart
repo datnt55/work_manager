@@ -11,6 +11,11 @@ class EventRepository{
     return databaseProvider.addEvent(event);
   }
 
+  Future<int> updateEvent(Event event) {
+    return databaseProvider.addEvent(event);
+  }
+
+
   Future<List<Event>> getEvents() {
     return databaseProvider.getEvents();
   }
