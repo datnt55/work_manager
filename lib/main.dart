@@ -50,6 +50,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: 0.7,
               ),
               Expanded(child: SingleChildScrollView(
+                controller: _scrollController,
                 child: Row(
                   crossAxisAlignment:  CrossAxisAlignment.start,
                   children: [
@@ -213,6 +215,16 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
     }
+  }
+
+  ScrollController _scrollController;
+
+  @override
+  void initState() {
+    _scrollController = ScrollController()
+      ..addListener(() {
+        print("offset = ${_scrollController.offset}");
+      });
   }
 }
 ScheduleBloc scheduleBloc = ScheduleBloc();

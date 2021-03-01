@@ -47,9 +47,9 @@ class RowTableDateWidgetBloc extends StatelessWidget{
   }
 }
 
-List<Positioned> _calculateEventOverLap(BuildContext context, List<Event> events){
+List<Widget> _calculateEventOverLap(BuildContext context, List<Event> events){
   int index = 0;
-  List<Positioned> eventWidget = new List();
+  List<Widget> eventWidget = new List();
   while(index < events.length){
     int total = 1;
     if (index < events.length - 1) {
@@ -61,67 +61,89 @@ List<Positioned> _calculateEventOverLap(BuildContext context, List<Event> events
     }
 
     for (int i =  0; i < total; i++){
-      final event = events[i + index];
-      var startDate = new DateTime.fromMillisecondsSinceEpoch(event.fromDate);
-      var endDtae = new DateTime.fromMillisecondsSinceEpoch(event.endDate);
-      final start = 55.0* startDate.hour + 55.0*startDate.minute/60.0 ;
-      final end = 55.0* endDtae.hour + 55.0*endDtae.minute/60.0;
-      final now = new DateTime.now();
-      final monday = now.subtract(Duration(days: now.weekday-1));
-      final width =  (MediaQuery.of(context).size.width - 32.0)/7;
-      Offset offset = Offset.zero;
-      final eventPost = Positioned(
-          top: start,
-          left: width*startDate.differenceMidNight(monday).inDays +  width/total*i,
-          child: LongPressDraggable(
-            childWhenDragging: Container(),
-            feedback: Center(
-              child: Container(
-                  margin: EdgeInsets.all(1.0),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4.0)), color:Color(event.color)),
-                  width: (width- 2.0*(total))/total ,
-                  height: end - start - 2.0,
-                  child: Builder(builder: (context){
-                    final textSize = 10.0;
-                    return Center(
-                      child: Text(event.title, style: TextStyle(color: Colors.white, fontSize: textSize),textAlign: TextAlign.center,),
-                    );
-                  })
-              ),
-            ),
-            child: Center(
-              child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.easeIn,
-                  margin: EdgeInsets.all(1.0),
-                  decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4.0)), color:Color(event.color)),
-                  width: (width- 2.0*(total))/total ,
-                  height: end - start - 2.0,
-                  child: Builder(builder: (context){
-                    final scale = context.watch<TableZoomCubit>().zoomLevel;
-                    print(scale);
-                    final textSize = 10.0;
-                    return Center(
-                      child: Text(event.title, style: TextStyle(color: Colors.white, fontSize: textSize),textAlign: TextAlign.center,),
-                    );
-                  })
-              ),
-            ),
-            onDragEnd: (detail){
-              int hour = detail.offset.dy~/55;
-              int minutes = (detail.offset.dy - hour*55).toInt();
-              int day = detail.offset.dx~/width;
-              event.fromDate = DateTime(startDate.year, startDate.month, monday.add(Duration(days: day)).day, hour, minutes).millisecondsSinceEpoch;
-              event.endDate = event.fromDate + endDtae.millisecondsSinceEpoch - startDate.millisecondsSinceEpoch;
-              context.read<ScheduleBloc>().add(UpdateSchedule(event));
-            },
-          )
-      );
-      eventWidget.add(eventPost);
+      var event = EventWidget(events[i + index],total, i);
+      eventWidget.add(event);
     }
     index += total;
   }
   return eventWidget;
+}
+
+class EventWidget extends StatefulWidget{
+  EventWidget(this.event, this.total, this.i);
+  final Event event;
+  final int total;
+  final int i;
+  @override
+  @override
+  State<EventWidget> createState() => _EventState(event, total,i);
+
+}
+
+class _EventState extends State<EventWidget>  {
+  final Event event;
+  final int total;
+  final int i;
+  double x = 0, y = 0;
+  double originX = 0, originY = 0;
+
+  _EventState(this.event, this.total, this.i){
+    var startDate = new DateTime.fromMillisecondsSinceEpoch(event.fromDate);
+    var endDtae = new DateTime.fromMillisecondsSinceEpoch(event.endDate);
+    final start = 55.0* startDate.hour + 55.0*startDate.minute/60.0 ;
+    final end = 55.0* endDtae.hour + 55.0*endDtae.minute/60.0;
+    final now = new DateTime.now();
+    final monday = now.subtract(Duration(days: now.weekday-1));
+    final width =  (MediaQuery.of(context).size.width - 32.0)/7;
+    Offset offset = Offset.zero;
+    x = width*startDate.differenceMidNight(monday).inDays +  width/total*i;
+    y = start;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var startDate = new DateTime.fromMillisecondsSinceEpoch(event.fromDate);
+    var endDtae = new DateTime.fromMillisecondsSinceEpoch(event.endDate);
+    final start = 55.0* startDate.hour + 55.0*startDate.minute/60.0 ;
+    final end = 55.0* endDtae.hour + 55.0*endDtae.minute/60.0;
+    final now = new DateTime.now();
+    final monday = now.subtract(Duration(days: now.weekday-1));
+    final width =  (MediaQuery.of(context).size.width - 32.0)/7;
+    return Positioned(
+        top: y,
+        left: x,
+        child:
+        GestureDetector(
+          child: Container(
+              margin: EdgeInsets.all(1.0),
+              decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(4.0)), color:Color(event.color)),
+              width: (width- 2.0*(total))/total ,
+              height: end - start - 2.0,
+              child: Builder(builder: (context){
+                final textSize = 10.0;
+                return Center(
+                  child: Text(event.title, style: TextStyle(color: Colors.white, fontSize: textSize),textAlign: TextAlign.center,),
+                );
+              })
+          ),
+          onLongPressStart: (details) {
+            originX = x;
+            originY = y;
+          },
+          onLongPressMoveUpdate: (details) {
+            print('----- time: ${DateTime.now().millisecondsSinceEpoch}');
+            print(details.globalPosition);
+            print(details.localPosition);
+            print(details.offsetFromOrigin);
+            print(details.localOffsetFromOrigin);
+            x = originX + details.offsetFromOrigin.dx;
+            y = originY + details.offsetFromOrigin.dy;
+            setState(() {});
+          },
+        )
+    );
+  }
+
 }
 
 bool calculateOverlap(Event first, Event second){
