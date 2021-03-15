@@ -186,7 +186,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ],
                       ),
                     ),
-                    Expanded(child: TableViewWidget())
+                    Expanded(child: TableViewWidget(_scrollController))
                   ],
                 ),
               ))
@@ -230,6 +230,10 @@ class _MyHomePageState extends State<MyHomePage> {
 ScheduleBloc scheduleBloc = ScheduleBloc();
 
 class TableViewWidget extends StatelessWidget {
+
+  final ScrollController _scrollController;
+  TableViewWidget(this._scrollController);
+
   @override
   Widget build(BuildContext context) {
     final controller = TransformationController();
@@ -256,7 +260,7 @@ class TableViewWidget extends StatelessWidget {
                   child: Stack(
                     children: [
                       CalendarScreen(),
-                      RowTableDateWidgetBloc(scheduleBloc),
+                      RowTableDateWidgetBloc(scheduleBloc,_scrollController),
                       TodayLineWidget()
                     ],
                   )

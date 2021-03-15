@@ -12,7 +12,8 @@ class EventRepository{
   }
 
   Future<int> updateEvent(Event event) {
-    return databaseProvider.addEvent(event);
+    print('----- Current event : ${event.id}');
+    return databaseProvider.updateEvent(event);
   }
 
 

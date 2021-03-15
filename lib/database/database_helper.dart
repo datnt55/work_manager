@@ -47,6 +47,8 @@ class DatabaseProvider{
   Future<int> updateEvent(Event event) async {
     final db = await database;
     return await db.update(TABLE_EVENT, event.toMap(),
+        where: 'id = ?',
+        whereArgs: [event.id],
         conflictAlgorithm: ConflictAlgorithm.ignore);
   }
 
