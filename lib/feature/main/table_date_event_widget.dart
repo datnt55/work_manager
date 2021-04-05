@@ -142,21 +142,23 @@ class _EventState extends State<EventWidget> {
             // print('Offset local ${details.localOffsetFromOrigin}');
             // print('scroll ${_scrollController.position.pixels}');
 
-            if (y > _scrollController.position.pixels + 450) {
-              y = originY + details.offsetFromOrigin.dy + 16.toDouble();
-              x = originX + details.offsetFromOrigin.dx;
-             // print('----- Current Y plus : $y');
-              _scrollController.jumpTo(_scrollController.position.pixels + 5);
-            } else if (y  < _scrollController.position.pixels + 20) {
-              _scrollController.jumpTo(_scrollController.position.pixels - 5);
-              y = originY + details.offsetFromOrigin.dy - 5.toDouble();
-              x = originX + details.offsetFromOrigin.dx;
-            } else {
-             // print('----- Current Y : $y');
-              x = originX + details.offsetFromOrigin.dx;
-              y = originY + details.offsetFromOrigin.dy+ 16.toDouble();
-              _scrollController.jumpTo(_scrollController.position.pixels + 5);
-            }
+            // if (y > _scrollController.position.pixels + 450) {
+            //   y = originY + details.offsetFromOrigin.dy + 16.toDouble();
+            //   x = originX + details.offsetFromOrigin.dx;
+            //  // print('----- Current Y plus : $y');
+            //   _scrollController.jumpTo(_scrollController.position.pixels + 5);
+            // } else if (y  < _scrollController.position.pixels + 20) {
+            //   _scrollController.jumpTo(_scrollController.position.pixels - 5);
+            //   y = originY + details.offsetFromOrigin.dy - 5.toDouble();
+            //   x = originX + details.offsetFromOrigin.dx;
+            // } else {
+            //  // print('----- Current Y : $y');
+            //   x = originX + details.offsetFromOrigin.dx;
+            //   y = originY + details.offsetFromOrigin.dy+ 16.toDouble();
+            //   _scrollController.jumpTo(_scrollController.position.pixels + 5);
+            // }
+            y = originY + details.offsetFromOrigin.dy;
+            x = originX + details.offsetFromOrigin.dx;
             setState(() {});
           },
           onLongPressEnd:(detail){
